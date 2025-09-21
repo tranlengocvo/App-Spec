@@ -234,7 +234,7 @@ export default function SwapDetailPage() {
                   <div>
                     <label className="text-sm font-medium text-gray-700">Desired CRNs</label>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {swap.desired_crns.map((crn, index) => (
+                      {swap.desired_crns.map((crn: string, index: number) => (
                         <Badge key={index} variant="outline">{crn}</Badge>
                       ))}
                     </div>
