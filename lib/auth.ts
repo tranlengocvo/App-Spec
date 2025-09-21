@@ -116,6 +116,23 @@ export async function signUp(email: string, password: string, name: string, majo
 }
 
 export async function signOut() {
-  const { error } = await supabase.auth.signOut();
-  return { error };
+  try {
+    // Sign out from Supabase
+    const { error } = await supabase.auth.signOut();
+    
+    // Clear any cached auth state
+    if (typeof window !== 'undefined') {
+      // Clear all Supabase-related localStorage
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+    
+    return { error };
+  } catch (error) {
+    console.error('Sign out error:', error);
+    return { error };
+  }
 }

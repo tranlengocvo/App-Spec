@@ -13,16 +13,31 @@ export default function Navigation() {
 
   const handleSignOut = async () => {
     try {
+      console.log('Starting sign out...');
+      
+      // Clear localStorage first
+      if (user) {
+        localStorage.removeItem(`user_swaps_${user.id}`);
+      }
+      
+      // Sign out from Supabase
       const { error } = await signOut();
       if (error) {
         console.error('Sign out error:', error);
+      } else {
+        console.log('Sign out successful');
       }
-      // Force reload to clear auth state
-      window.location.href = '/';
+      
+      // Clear all auth-related localStorage
+      localStorage.removeItem('sb-exiehixmsspgqyhxowag-auth-token');
+      localStorage.removeItem('supabase.auth.token');
+      
+      // Force page reload to clear all state
+      window.location.reload();
     } catch (error) {
       console.error('Sign out error:', error);
       // Force reload even if there's an error
-      window.location.href = '/';
+      window.location.reload();
     }
   };
 
