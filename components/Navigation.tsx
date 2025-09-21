@@ -12,8 +12,18 @@ export default function Navigation() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push('/');
+    try {
+      const { error } = await signOut();
+      if (error) {
+        console.error('Sign out error:', error);
+      }
+      // Force reload to clear auth state
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Sign out error:', error);
+      // Force reload even if there's an error
+      window.location.href = '/';
+    }
   };
 
   if (loading) {

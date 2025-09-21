@@ -7,11 +7,11 @@ const crnSchema = z.string()
 
 // Create swap form schema
 export const createSwapSchema = z.object({
-  course_id: z.string().uuid('Invalid course selection'),
+  course_id: z.string().min(1, 'Please select a course'),
   current_crn: crnSchema,
   desired_crns: z.array(crnSchema)
     .min(1, 'At least one desired CRN is required')
-    .max(5, 'Maximum 5 desired CRNs allowed'),
+    .max(3, 'Maximum 3 desired CRNs allowed'),
   term: z.string().min(1, 'Term is required'),
   campus: z.string().min(1, 'Campus is required'),
   time_window: z.string().optional(),

@@ -179,6 +179,28 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Show create swap button only when logged in */}
+        {user && canCreateSwaps && (
+          <div className="mt-12 text-center">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 max-w-2xl mx-auto">
+              <h3 className="text-lg font-medium text-green-900 mb-2">
+                Ready to Create a Swap?
+              </h3>
+              <p className="text-green-700 mb-4">
+                You&apos;re logged in and ready to create swap requests or make offers.
+              </p>
+              <div className="flex justify-center space-x-4">
+                <Link href="/swap/new">
+                  <Button>Create Swap Request</Button>
+                </Link>
+                <Link href="/swaps">
+                  <Button variant="outline">Browse Swaps</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

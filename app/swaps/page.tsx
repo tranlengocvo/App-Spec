@@ -1,200 +1,105 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
-import SwapCard, { SwapCardData } from '@/components/SwapCard';
-import FiltersBar, { FilterState } from '@/components/FiltersBar';
-import Pagination from '@/components/Pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Plus, RefreshCw } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Plus, User, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
-const ITEMS_PER_PAGE = 14;
-
-function SwapsPageContent() {
-  const { user, canCreateSwaps } = useAuth();
-  const searchParams = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState<FilterState>({
-    subject: '',
-    number: '',
-    onlyOpen: true,
-  });
-
-  // Initialize filters from URL params
-  useEffect(() => {
-    const course = searchParams.get('course');
-    if (course) {
-      const [subject, number] = course.split(' ');
-      setFilters(prev => ({
-        ...prev,
-        subject: subject || '',
-        number: number || '',
-      }));
-    }
-  }, [searchParams]);
-
-  const { data: swapsData, isLoading, error, refetch } = useQuery({
-    queryKey: ['swaps', currentPage, filters],
-    queryFn: async () => {
-      let query = supabase
-        .from('swap_requests')
-        .select(`
-          id,
-          current_crn,
-          desired_crns,
-          time_window,
-          campus,
-          term,
-          status,
-          created_at,
-          courses!inner (
-            id,
-            subject,
-            number,
-            title
-          ),
-          users!inner (
-            name,
-            major,
-            year
-          ),
-          offers (
-            id
-          )
-        `)
-        .order('created_at', { ascending: false });
-
-      // Apply filters
-      if (filters.subject) {
-        query = query.eq('courses.subject', filters.subject);
-      }
-      if (filters.number) {
-        query = query.eq('courses.number', filters.number);
-      }
-      if (filters.onlyOpen) {
-        query = query.eq('status', 'open');
-      }
-
-      // Apply pagination
-      const from = (currentPage - 1) * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE - 1;
-      query = query.range(from, to);
-
-      const { data, error, count } = await query;
-
-      if (error) {
-        throw error;
-      }
-
-      // Transform data to match SwapCardData interface
-      const transformedData = data?.map(swap => ({
-        id: swap.id,
-        course: {
-          subject: swap.courses[0]?.subject,
-          number: swap.courses[0]?.number,
-          title: swap.courses[0]?.title,
-        },
-        user: {
-          name: swap.users[0]?.name,
-          major: swap.users[0]?.major,
-          year: swap.users[0]?.year,
-        },
-        current_crn: swap.current_crn,
-        desired_crns: swap.desired_crns,
-        time_window: swap.time_window,
-        campus: swap.campus,
-        term: swap.term,
-        status: swap.status,
-        offers_count: swap.offers?.length || 0,
-        created_at: swap.created_at,
-      })) || [];
-
-      return {
-        swaps: transformedData,
-        totalCount: count || 0,
-        totalPages: Math.ceil((count || 0) / ITEMS_PER_PAGE),
-      };
+// Mock data for demo
+const mockSwaps = [
+  {
+    id: '1',
+    current_crn: '12345',
+    desired_crns: ['12346', '12347'],
+    time_window: 'Morning classes preferred',
+    campus: 'West Lafayette',
+    term: 'Fall 2024',
+    status: 'open',
+    notes: 'Looking to switch to a different time slot',
+    created_at: '2024-01-15T10:30:00Z',
+    courses: {
+      subject: 'CS',
+      number: '18000',
+      title: 'Problem Solving and Object-Oriented Programming'
     },
-  });
-
-  const handleFiltersChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page when filters change
-  };
-
-  const handleResetFilters = () => {
-    setFilters({
-      subject: '',
-      number: '',
-      onlyOpen: true,
-    });
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <Skeleton className="h-8 w-48 mb-2" />
-                <Skeleton className="h-4 w-64" />
-              </div>
-              <Skeleton className="h-10 w-32" />
-            </div>
-            <Skeleton className="h-32 w-full" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-64 w-full" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    users: {
+      name: 'John Doe',
+      major: 'Computer Science',
+      year: 'Junior'
+    }
+  },
+  {
+    id: '2',
+    current_crn: '12348',
+    desired_crns: ['12349'],
+    time_window: 'Afternoon classes only',
+    campus: 'West Lafayette',
+    term: 'Fall 2024',
+    status: 'open',
+    notes: 'Need to accommodate work schedule',
+    created_at: '2024-01-14T14:20:00Z',
+    courses: {
+      subject: 'CS',
+      number: '24000',
+      title: 'Programming in C'
+    },
+    users: {
+      name: 'Jane Smith',
+      major: 'Computer Science',
+      year: 'Senior'
+    }
+  },
+  {
+    id: '3',
+    current_crn: '12350',
+    desired_crns: ['12351', '12352'],
+    time_window: 'Any time',
+    campus: 'West Lafayette',
+    term: 'Fall 2024',
+    status: 'open',
+    notes: 'Flexible with timing',
+    created_at: '2024-01-13T09:15:00Z',
+    courses: {
+      subject: 'MATH',
+      number: '26100',
+      title: 'Multivariate Calculus'
+    },
+    users: {
+      name: 'Mike Johnson',
+      major: 'Mathematics',
+      year: 'Sophomore'
+    }
   }
+];
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Failed to load swaps
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  There was an error loading the swap requests. Please try again.
-                </p>
-                <Button onClick={() => refetch()}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Try Again
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+export default function SwapsPage() {
+  const { user, canCreateSwaps } = useAuth();
+  const [swaps] = useState(mockSwaps);
 
-  const { swaps, totalCount, totalPages } = swapsData || { swaps: [], totalCount: 0, totalPages: 0 };
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+    return date.toLocaleDateString();
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'open': return 'bg-green-100 text-green-800';
+      case 'matched': return 'bg-blue-100 text-blue-800';
+      case 'closed': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -211,7 +116,7 @@ function SwapsPageContent() {
               Find and swap classes with other Purdue students
             </p>
           </div>
-          {canCreateSwaps && (
+          {user && canCreateSwaps && (
             <Link href="/swap/new">
               <Button className="flex items-center space-x-2">
                 <Plus className="h-4 w-4" />
@@ -221,71 +126,100 @@ function SwapsPageContent() {
           )}
         </div>
 
-        {/* Filters */}
-        <FiltersBar
-          filters={filters}
-          onFiltersChange={handleFiltersChange}
-          onReset={handleResetFilters}
-        />
-
-        {/* Results */}
-        {swaps.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No swaps found
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {filters.subject || filters.number || filters.onlyOpen
-                    ? 'Try adjusting your filters to see more results.'
-                    : 'Be the first to create a swap request!'}
-                </p>
-                {canCreateSwaps && (
-                  <Link href="/swap/new">
-                    <Button>Create Swap Request</Button>
-                  </Link>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <>
-            {/* Results Count */}
-            <div className="mb-6">
-              <p className="text-sm text-gray-600">
-                Showing {swaps.length} of {totalCount} swap{totalCount !== 1 ? 's' : ''}
+        {/* Demo Notice */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 text-sm">
+            <strong>Demo Mode:</strong> This is showing mock data. In a real application, this would connect to a database.
               </p>
             </div>
 
             {/* Swaps Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {swaps.map((swap) => (
-                <SwapCard key={swap.id} swap={swap} />
-              ))}
+            <Card key={swap.id} className="hover:shadow-md transition-shadow">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">
+                      {swap.courses.subject} {swap.courses.number}
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      {swap.courses.title}
+                    </CardDescription>
+                  </div>
+                  <Badge className={getStatusColor(swap.status)}>
+                    {swap.status.toUpperCase()}
+                  </Badge>
             </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                itemsPerPage={ITEMS_PER_PAGE}
-                totalItems={totalCount}
-              />
-            )}
+              </CardHeader>
+              
+              <CardContent>
+                <div className="space-y-3">
+                  {/* User Info */}
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <User className="h-4 w-4" />
+                    <span>{swap.users.name}</span>
+                    {swap.users.major && (
+                      <>
+                        <span>•</span>
+                        <span>{swap.users.major}</span>
+                      </>
+                    )}
+                    {swap.users.year && (
+                      <>
+                        <span>•</span>
+                        <span>{swap.users.year}</span>
           </>
         )}
+                  </div>
+
+                  {/* CRN Info */}
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700">Current:</span>
+                      <Badge variant="outline">{swap.current_crn}</Badge>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700">Desired:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {swap.desired_crns.map((crn, index) => (
+                          <Badge key={index} variant="outline">{crn}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Info */}
+                  <div className="space-y-1 text-sm text-gray-600">
+                    {swap.time_window && (
+                      <div className="flex items-center space-x-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{swap.time_window}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="h-4 w-4" />
+                      <span>{swap.campus} • {swap.term}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-between pt-3 border-t">
+                    <span className="text-xs text-gray-500">
+                      {formatTimeAgo(swap.created_at)}
+                    </span>
+                    <Link href={`/swap/${swap.id}`}>
+                      <Button size="sm" variant="outline">
+                        View Details
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </main>
     </div>
-  );
-}
-
-export default function SwapsPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SwapsPageContent />
-    </Suspense>
   );
 }

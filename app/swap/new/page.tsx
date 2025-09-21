@@ -4,10 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
 import { createSwapSchema, CreateSwapFormData } from '@/lib/validations';
-import { searchCourses, parseCourseInput, CourseWithSections } from '@/lib/purdue-api';
-import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
@@ -19,11 +16,19 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Plus, X, Search } from 'lucide-react';
 
+interface PurdueCourse {
+  Subject: string;
+  Number: string;
+  Title: string;
+}
+
 export default function CreateSwapPage() {
   const { user, canCreateSwaps } = useAuth();
   const router = useRouter();
-  const [selectedCourse, setSelectedCourse] = useState<CourseWithSections | null>(null);
   const [courseSearch, setCourseSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<PurdueCourse[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<PurdueCourse | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
   const [desiredCrns, setDesiredCrns] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -50,24 +55,61 @@ export default function CreateSwapPage() {
     }
   }, [user, canCreateSwaps, router]);
 
-  // Search for course
-  const { data: searchResults, isLoading: isSearching } = useQuery({
-    queryKey: ['courseSearch', courseSearch],
-    queryFn: () => {
-      const parsed = parseCourseInput(courseSearch);
-      return parsed ? searchCourses(parsed.subject, parsed.number) : null;
-    },
-    enabled: !!courseSearch && courseSearch.length > 3,
-  });
+  // Search courses from Purdue.io API
+  const searchCourses = async (query: string) => {
+    if (query.length < 3) return;
+    
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `https://api.purdue.io/odata/Courses?$filter=contains(Title, '${query}') or (Subject eq '${query.toUpperCase()}')&$top=10`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setSearchResults(data.value || []);
+      }
+    } catch (error) {
+      console.error('Error searching courses:', error);
+      // Fallback to mock data if API fails
+      const mockCourses = [
+        { Subject: 'CS', Number: '18000', Title: 'Problem Solving and Object-Oriented Programming' },
+        { Subject: 'CS', Number: '24000', Title: 'Programming in C' },
+        { Subject: 'MATH', Number: '26100', Title: 'Multivariate Calculus' },
+        { Subject: 'MATH', Number: '35100', Title: 'Elementary Linear Algebra' },
+        { Subject: 'ENGL', Number: '10600', Title: 'First-Year Composition' }
+      ];
+      setSearchResults(mockCourses.filter(course => 
+        course.Title.toLowerCase().includes(query.toLowerCase()) ||
+        course.Subject.toLowerCase().includes(query.toLowerCase())
+      ));
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
-  const handleCourseSelect = (course: CourseWithSections) => {
+  // Handle course search input
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (courseSearch.length >= 3) {
+        searchCourses(courseSearch);
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [courseSearch]);
+
+  const handleCourseSelect = (course: PurdueCourse) => {
     setSelectedCourse(course);
-    setValue('course_id', course.id);
+    setValue('course_id', `${course.Subject}-${course.Number}`);
     setCourseSearch('');
+    setSearchResults([]);
   };
 
   const addDesiredCrn = () => {
-    if (desiredCrns.length < 5) {
+    if (desiredCrns.length < 3) {
       setDesiredCrns([...desiredCrns, '']);
     }
   };
@@ -94,49 +136,21 @@ export default function CreateSwapPage() {
     setError('');
 
     try {
-      // Check for duplicate open swap request
-      const { data: existingSwap, error: checkError } = await supabase
-        .from('swap_requests')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('course_id', data.course_id)
-        .eq('current_crn', data.current_crn)
-        .eq('status', 'open')
-        .single();
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (checkError && checkError.code !== 'PGRST116') {
-        throw checkError;
-      }
+      // In a real app, this would insert into the database
+      console.log('Creating swap request:', {
+        ...data,
+        user_id: user.id,
+        course: selectedCourse
+      });
 
-      if (existingSwap) {
-        setError('You already have an open swap request for this course and CRN');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Create the swap request
-      const { data: swapRequest, error: createError } = await supabase
-        .from('swap_requests')
-        .insert({
-          user_id: user.id,
-          course_id: data.course_id,
-          current_crn: data.current_crn,
-          desired_crns: data.desired_crns,
-          term: data.term,
-          campus: data.campus,
-          time_window: data.time_window || null,
-          notes: data.notes || null,
-          status: 'open',
-        })
-        .select()
-        .single();
-
-      if (createError) {
-        throw createError;
-      }
-
-      // Redirect to the swap detail page
-      router.push(`/swap/${swapRequest.id}`);
+      // Simulate success
+      alert('Swap request created successfully! (This is a demo)');
+      
+      // Redirect to swaps page
+      router.push('/swaps');
     } catch (err) {
       console.error('Error creating swap:', err);
       setError(err instanceof Error ? err.message : 'Failed to create swap request');
@@ -169,6 +183,13 @@ export default function CreateSwapPage() {
           <p className="text-gray-600">Request to swap your current class section with other students.</p>
         </div>
 
+        {/* Demo Notice */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 text-sm">
+            <strong>Demo Mode:</strong> This form uses real Purdue.io API for course search but saves to mock data.
+          </p>
+        </div>
+
         <Card>
           <CardHeader>
             <CardTitle>Swap Details</CardTitle>
@@ -190,51 +211,46 @@ export default function CreateSwapPage() {
                   Course *
                 </label>
                 <div className="space-y-2">
-                  <div className="flex space-x-2">
+                  <div className="relative">
                     <Input
                       value={courseSearch}
                       onChange={(e) => setCourseSearch(e.target.value)}
-                      placeholder="Search for course (e.g., CS 180)"
-                      className="flex-1"
+                      placeholder="Search for course (e.g., CS 180, Mathematics, Algebra)"
+                      className="pr-10"
                     />
-                    <Button type="button" variant="outline" disabled={!courseSearch}>
-                      <Search className="h-4 w-4" />
-                    </Button>
+                    {isSearching && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </div>
+                    )}
                   </div>
                   
-                  {isSearching && (
-                    <div className="text-sm text-gray-500">Searching...</div>
-                  )}
-                  
-                  {searchResults && (
-                    <div className="border rounded-lg p-3 bg-gray-50">
-                      <div className="flex items-center justify-between">
-                        <div>
+                  {searchResults.length > 0 && (
+                    <div className="border rounded-lg bg-white shadow-lg max-h-60 overflow-y-auto">
+                      {searchResults.map((course, index) => (
+                        <div
+                          key={index}
+                          className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0"
+                          onClick={() => handleCourseSelect(course)}
+                        >
                           <div className="font-medium">
-                            {searchResults.subject} {searchResults.number}
+                            {course.Subject} {course.Number}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {searchResults.title}
+                            {course.Title}
                           </div>
                         </div>
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => handleCourseSelect(searchResults)}
-                        >
-                          Select
-                        </Button>
-                      </div>
+                      ))}
                     </div>
                   )}
                   
                   {selectedCourse && (
                     <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <Badge variant="secondary">
-                        {selectedCourse.subject} {selectedCourse.number}
+                        {selectedCourse.Subject} {selectedCourse.Number}
                       </Badge>
                       <span className="text-sm text-gray-700">
-                        {selectedCourse.title}
+                        {selectedCourse.Title}
                       </span>
                     </div>
                   )}
@@ -262,7 +278,7 @@ export default function CreateSwapPage() {
               {/* Desired CRNs */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Desired CRNs * (1-5)
+                  Desired CRNs * (1-3)
                 </label>
                 <div className="space-y-2">
                   {desiredCrns.map((crn, index) => (
@@ -286,7 +302,7 @@ export default function CreateSwapPage() {
                       )}
                     </div>
                   ))}
-                  {desiredCrns.length < 5 && (
+                  {desiredCrns.length < 3 && (
                     <Button
                       type="button"
                       variant="outline"
@@ -382,7 +398,7 @@ export default function CreateSwapPage() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting || !selectedCourse}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Create Swap Request
                 </Button>
