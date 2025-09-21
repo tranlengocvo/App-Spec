@@ -50,15 +50,15 @@ export async function POST(request: NextRequest) {
       let output = '';
       let errorOutput = '';
 
-      seedProcess.stdout.on('data', (data) => {
+      seedProcess.stdout.on('data', (data: { toString: () => string; }) => {
         output += data.toString();
       });
 
-      seedProcess.stderr.on('data', (data) => {
+      seedProcess.stderr.on('data', (data: { toString: () => string; }) => {
         errorOutput += data.toString();
       });
 
-      seedProcess.on('close', (code) => {
+      seedProcess.on('close', (code: number) => {
         if (code === 0) {
           resolve(NextResponse.json({ 
             success: true, 
