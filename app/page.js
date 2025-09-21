@@ -37,6 +37,50 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
+          {/* Logo */}
+          <div className="mb-6 flex justify-center">
+            <div className="bg-black p-4 rounded-lg shadow-lg">
+              <div className="flex items-center space-x-4">
+                {/* Left Speech Bubble - Graduation Cap */}
+                <div className="relative">
+                  <div className="w-12 h-8 bg-[#CFB991] rounded-lg relative">
+                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-[#CFB991]"></div>
+                    <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
+                      <div className="w-6 h-4 bg-black rounded-sm"></div>
+                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-b-2 border-transparent border-b-black"></div>
+                      <div className="absolute top-0 right-0 w-1 h-3 bg-black"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Circular Arrows */}
+                <div className="flex flex-col items-center space-y-1">
+                  <div className="w-6 h-6 border-2 border-[#CFB991] rounded-full flex items-center justify-center">
+                    <div className="w-0 h-0 border-l-2 border-r-2 border-b-2 border-transparent border-b-[#CFB991] transform rotate-45"></div>
+                  </div>
+                  <div className="w-6 h-6 border-2 border-[#CFB991] rounded-full flex items-center justify-center">
+                    <div className="w-0 h-0 border-l-2 border-r-2 border-b-2 border-transparent border-b-[#CFB991] transform -rotate-45"></div>
+                  </div>
+                </div>
+                
+                {/* Right Speech Bubble - Document */}
+                <div className="relative">
+                  <div className="w-12 h-8 bg-[#CFB991] rounded-lg relative">
+                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-[#CFB991]"></div>
+                    <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
+                      <div className="w-8 h-6 bg-black rounded-sm relative">
+                        <div className="absolute top-1 left-1 w-6 h-0.5 bg-[#CFB991]"></div>
+                        <div className="absolute top-2 left-1 w-4 h-0.5 bg-[#CFB991]"></div>
+                        <div className="absolute top-3 left-1 w-5 h-0.5 bg-[#CFB991]"></div>
+                        <div className="absolute bottom-1 right-1 w-2 h-2 bg-[#CFB991] transform rotate-45"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <h1 className="text-4xl font-bold text-black mb-4">
             Class Swap for Purdue Students
           </h1>
