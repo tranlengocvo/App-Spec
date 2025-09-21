@@ -2,10 +2,30 @@
 
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { isSupabaseConfigured, isServiceRoleAvailable } from '@/lib/env';
+import { useEffect, useState } from 'react';
 
 export default function SetupBanner() {
-  const supabaseConfigured = isSupabaseConfigured();
-  const serviceRoleAvailable = isServiceRoleAvailable();
+  const [mounted, setMounted] = useState(false);
+  const [supabaseConfigured, setSupabaseConfigured] = useState(false);
+  const [serviceRoleAvailable, setServiceRoleAvailable] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const supabaseConfig = isSupabaseConfigured();
+    const serviceRole = isServiceRoleAvailable();
+    console.log('SetupBanner Debug:', {
+      supabaseConfig,
+      serviceRole,
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'loaded' : 'missing'
+    });
+    setSupabaseConfigured(supabaseConfig);
+    setServiceRoleAvailable(serviceRole);
+  }, []);
+
+  if (!mounted) {
+    return null; // Prevent hydration mismatch
+  }
 
   if (supabaseConfigured && serviceRoleAvailable) {
     return null; // No banner needed
