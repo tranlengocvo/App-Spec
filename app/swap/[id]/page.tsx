@@ -341,7 +341,7 @@ export default function SwapDetailPage() {
                   Swap not found
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  The swap request you're looking for doesn't exist or has been removed.
+                  The swap request you&apos;re looking for doesn&apos;t exist or has been removed.
                 </p>
                 <Link href="/swaps">
                   <Button>Back to Swaps</Button>

@@ -10,8 +10,8 @@ const envSchema = z.object({
   // Server-only environment variables
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   ALLOWED_EMAIL_DOMAIN: z.string().default('purdue.edu'),
-  PURDUE_USE_SEED_FALLBACK: z.string().transform(val => val === 'true').default('true'),
-  ENABLE_LOAD_DEMO_BUTTON: z.string().transform(val => val === 'true').default('true'),
+  PURDUE_USE_SEED_FALLBACK: z.string().transform((val: string) => val === 'true').default('true'),
+  ENABLE_LOAD_DEMO_BUTTON: z.string().transform((val: string) => val === 'true').default('true'),
   RATE_LIMIT_CREATE_PER_DAY: z.string().transform(Number).default('3'),
   RATE_LIMIT_OFFER_PER_HOUR: z.string().transform(Number).default('10'),
   RATE_LIMIT_DM_PER_HOUR: z.string().transform(Number).default('20'),

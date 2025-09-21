@@ -79,15 +79,9 @@ export default function DashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('swaps');
 
-  // Redirect if not authenticated
-  if (!user) {
-    router.push('/signin');
-    return null;
-  }
-
-  // Fetch dashboard data
+  // Fetch dashboard data (enabled only when user exists)
   const { data: dashboardData, isLoading, error } = useQuery({
-    queryKey: ['dashboard', user.id],
+  queryKey: ['dashboard', user?.id],
     queryFn: async () => {
       // Fetch my swaps
       const { data: mySwaps, error: swapsError } = await supabase
@@ -107,7 +101,7 @@ export default function DashboardPage() {
             id
           )
         `)
-        .eq('user_id', user.id)
+  .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
 
       if (swapsError) throw swapsError;
@@ -133,7 +127,7 @@ export default function DashboardPage() {
             )
           )
         `)
-        .eq('user_id', user.id)
+  .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
 
       if (offersError) throw offersError;
@@ -159,7 +153,7 @@ export default function DashboardPage() {
             )
           )
         `)
-        .eq('user_id', user.id)
+  .eq('user_id', user!.id)
         .eq('status', 'matched')
         .order('created_at', { ascending: false });
 
@@ -203,7 +197,15 @@ export default function DashboardPage() {
         })) || [],
       };
     },
+    enabled: !!user,
   });
+
+  // Redirect if not authenticated (run after hooks)
+  if (!user) {
+    // useRouter push is safe here since hooks have already been called above
+    router.push('/signin');
+    return null;
+  }
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);

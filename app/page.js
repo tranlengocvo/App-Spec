@@ -166,7 +166,7 @@ export default function Home() {
               </h3>
               <p className="text-blue-700 mb-4">
                 This is a demo version. You can browse swaps and offers without signing up, 
-                but you'll need to create an account to create swaps, make offers, or send messages.
+                but you&apos;ll need to create an account to create swaps, make offers, or send messages.
               </p>
               <div className="flex justify-center space-x-4">
                 <Link href="/signup">

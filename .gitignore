@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+# /node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+## node_modules is ignored by default to avoid committing dependencies (large + platform-specific).
+## I commented it out so you can see the folder in your editor. Be careful NOT to commit node_modules to git.
+# node_modules
+node_modules

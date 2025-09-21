@@ -85,7 +85,7 @@ export default function SignUpPage() {
               </div>
               <h2 className="mt-4 text-lg font-medium text-gray-900">Check your email</h2>
               <p className="mt-2 text-sm text-gray-600">
-                We've sent you a verification link. Please check your email and click the link to verify your account.
+                We&apos;ve sent you a verification link. Please check your email and click the link to verify your account.
               </p>
             </div>
           </CardContent>
