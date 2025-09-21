@@ -164,15 +164,15 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#CFB991]">
         <Navigation />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="h-8 bg-black/20 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-black/20 rounded w-1/2 mb-8"></div>
             <div className="space-y-4">
-              <div className="h-32 bg-gray-200 rounded"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-32 bg-black/20 rounded"></div>
+              <div className="h-32 bg-black/20 rounded"></div>
             </div>
           </div>
         </div>
@@ -185,17 +185,17 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#CFB991]">
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-black mb-2">
               My Dashboard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-black/80">
               Manage your swap requests and offers
             </p>
           </div>
@@ -222,10 +222,10 @@ export default function DashboardPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-lg font-medium text-black mb-2">
                       No swap requests yet
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-black/80 mb-4">
                       Create your first swap request to get started!
                     </p>
                     {canCreateSwaps && (
@@ -261,11 +261,11 @@ export default function DashboardPage() {
                         {/* CRN Info */}
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-700">Current:</span>
+                            <span className="text-sm font-medium text-black/80">Current:</span>
                             <Badge variant="outline">{swap.current_crn}</Badge>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-700">Desired:</span>
+                            <span className="text-sm font-medium text-black/80">Desired:</span>
                             <div className="flex flex-wrap gap-1">
                               {swap.desired_crns.map((crn: string, index: number) => (
                                 <Badge key={index} variant="outline">{crn}</Badge>
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                         </div>
 
                         {/* Additional Info */}
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-black/70">
                           {swap.time_window && (
                             <div className="flex items-center space-x-2">
                               <Clock className="h-4 w-4" />
@@ -289,14 +289,14 @@ export default function DashboardPage() {
                         </div>
 
                         {/* Offers Count */}
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <div className="flex items-center space-x-2 text-sm text-black/70">
                           <MessageSquare className="h-4 w-4" />
                           <span>{swap.offers_count} offer{swap.offers_count !== 1 ? 's' : ''}</span>
                         </div>
 
                         {/* Actions */}
                         <div className="flex items-center justify-between pt-3 border-t">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-black/60">
                             {formatTimeAgo(swap.created_at)}
                           </span>
                         <div className="flex items-center space-x-2">
@@ -344,13 +344,13 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-lg font-medium text-black mb-2">
                     Offers feature coming soon
                     </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-black/80 mb-4">
                     This feature is under development. You&apos;ll be able to make offers to other students&apos; swap requests and track their status.
                   </p>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-black/70">
                     Expected features:
                     <ul className="mt-2 space-y-1 text-left max-w-md mx-auto">
                       <li>• Make offers to swap requests</li>

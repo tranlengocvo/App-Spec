@@ -14,15 +14,15 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#CFB991]">
         <Navigation />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="h-8 bg-black/20 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-black/20 rounded w-1/2 mb-8"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="h-64 bg-gray-200 rounded"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-64 bg-black/20 rounded"></div>
+              <div className="h-64 bg-black/20 rounded"></div>
             </div>
           </div>
         </div>
@@ -31,26 +31,30 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#CFB991]">
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-black mb-4">
             Class Swap for Purdue Students
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-black/80 mb-8">
             Find and swap classes with other Purdue students. Get the schedule that works for you.
           </p>
           
           {!user && (
             <div className="flex justify-center space-x-4">
               <Link href="/signup">
-                <Button size="lg">Get Started</Button>
+                <Button size="lg" className="bg-black text-white hover:bg-gray-800 shadow-lg">
+                  Get Started
+                </Button>
               </Link>
               <Link href="/swaps">
-                <Button variant="outline" size="lg">Browse Swaps</Button>
+                <Button variant="outline" size="lg" className="border-black text-black hover:bg-black hover:text-white shadow-lg">
+                  Browse Swaps
+                </Button>
               </Link>
             </div>
           )}

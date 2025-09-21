@@ -43,16 +43,16 @@ export default function Navigation() {
 
   if (loading) {
     return (
-      <nav className="bg-white shadow-sm border-b">
+      <nav className="bg-black shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
+              <Link href="/" className="text-xl font-bold text-white">
                 Class Swap
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="h-8 w-20 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-8 w-20 bg-white/20 rounded animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -61,24 +61,24 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-black shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-gray-900">
+            <Link href="/" className="text-xl font-bold text-white">
               Class Swap
             </Link>
             <div className="hidden md:ml-10 md:flex md:space-x-8">
               <Link
                 href="/swaps"
-                className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-white/80 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
               >
                 Browse Swaps
               </Link>
               {user && (
                 <Link
                   href="/dashboard"
-                  className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-white/80 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Dashboard
                 </Link>
@@ -98,8 +98,8 @@ export default function Navigation() {
                   </Link>
                 )}
                 <div className="flex items-center space-x-2">
-                  <User className="h-5 w-5 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">
+                  <User className="h-5 w-5 text-white/80" />
+                  <span className="text-sm font-medium text-white">
                     {user.name}
                   </span>
                 </div>
@@ -116,12 +116,12 @@ export default function Navigation() {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link href="/signin">
-                  <Button variant="ghost" size="sm">
+                  <Button size="sm" className="bg-white text-black hover:bg-gray-100">
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm">
+                  <Button size="sm" className="bg-[#CFB991] text-black hover:bg-[#B8A882]">
                     Sign Up
                   </Button>
                 </Link>

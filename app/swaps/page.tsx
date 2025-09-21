@@ -102,17 +102,17 @@ export default function SwapsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#CFB991]">
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-black mb-2">
               Class Swaps
             </h1>
-            <p className="text-gray-600">
+            <p className="text-black/80">
               Find and swap classes with other Purdue students
             </p>
           </div>
@@ -127,8 +127,8 @@ export default function SwapsPage() {
         </div>
 
         {/* Demo Notice */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-blue-800 text-sm">
+        <div className="mb-6 p-4 bg-black/10 border border-black/20 rounded-lg">
+          <p className="text-black text-sm">
             <strong>Demo Mode:</strong> This is showing mock data. In a real application, this would connect to a database.
               </p>
             </div>

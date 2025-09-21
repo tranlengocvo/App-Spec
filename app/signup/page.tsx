@@ -74,7 +74,7 @@ export default function SignUpPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-[#CFB991] py-12 px-4 sm:px-6 lg:px-8">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6">
             <div className="text-center">
@@ -83,8 +83,8 @@ export default function SignUpPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="mt-4 text-lg font-medium text-gray-900">Check your email</h2>
-              <p className="mt-2 text-sm text-gray-600">
+              <h2 className="mt-4 text-lg font-medium text-black">Check your email</h2>
+              <p className="mt-2 text-sm text-black/80">
                 We&apos;ve sent you a verification link. Please check your email and click the link to verify your account.
               </p>
             </div>
@@ -95,11 +95,11 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#CFB991] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Class Swap</h1>
-          <p className="mt-2 text-sm text-gray-600">Create your account</p>
+          <h1 className="text-3xl font-bold text-black">Class Swap</h1>
+          <p className="mt-2 text-sm text-black/80">Create your account</p>
         </div>
         
         <Card>

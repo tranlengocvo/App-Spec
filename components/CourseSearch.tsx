@@ -46,7 +46,7 @@ export default function CourseSearch({ onCourseSelect, showSections = true }: Co
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="e.g., CS 180"
-          className="flex-1"
+          className="flex-1 bg-white border-black"
         />
         <Button type="submit" disabled={!searchInput.trim()}>
           <Search className="h-4 w-4 mr-2" />

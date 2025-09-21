@@ -38,11 +38,11 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#CFB991] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Class Swap</h1>
-          <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+          <h1 className="text-3xl font-bold text-black">Class Swap</h1>
+          <p className="mt-2 text-sm text-black/80">Sign in to your account</p>
         </div>
         
         <Card>
@@ -71,7 +71,7 @@ export default function SignInPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your.email@purdue.edu"
                   required
-                  className="mt-1"
+                  className="mt-1 bg-white border-black"
                 />
               </div>
               
@@ -85,7 +85,7 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-1"
+                  className="mt-1 bg-white border-black"
                 />
               </div>
               
