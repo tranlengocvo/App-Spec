@@ -1,0 +1,42 @@
+[
+  {
+    "subject": "CS",
+    "number": "180",
+    "title": "Problem Solving and Object-Oriented Programming"
+  },
+  {
+    "subject": "CS",
+    "number": "240",
+    "title": "Programming in C"
+  },
+  {
+    "subject": "CS",
+    "number": "250",
+    "title": "Computer Architecture"
+  },
+  {
+    "subject": "CS",
+    "number": "251",
+    "title": "Data Structures and Algorithms"
+  },
+  {
+    "subject": "CS",
+    "number": "252",
+    "title": "Systems Programming"
+  },
+  {
+    "subject": "MATH",
+    "number": "161",
+    "title": "Plane Analytic Geometry and Calculus I"
+  },
+  {
+    "subject": "MATH",
+    "number": "162",
+    "title": "Plane Analytic Geometry and Calculus II"
+  },
+  {
+    "subject": "MATH",
+    "number": "261",
+    "title": "Multivariate Calculus"
+  }
+]
