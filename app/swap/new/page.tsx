@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { createSwapSchema, CreateSwapFormData } from '@/lib/validations';
 import { searchCourses, parseCourseInput, CourseWithSections } from '@/lib/purdue-api';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';

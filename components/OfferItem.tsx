@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMessageSchema, CreateMessageFormData } from '@/lib/validations';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/lib/auth-context';
 import { MessageSquare, User, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';

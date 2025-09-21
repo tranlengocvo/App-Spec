@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
 import SwapCard, { SwapCardData } from '@/components/SwapCard';

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseClient';
 import { isServiceRoleAvailable } from '@/lib/env';
 
 export async function POST(request: NextRequest): Promise<Response> {

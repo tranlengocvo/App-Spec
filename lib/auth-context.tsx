@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, AuthState, getCurrentUser, isUserWhitelisted, canUserCreateSwaps } from './auth';
-import { supabase } from './supabase';
+import { supabase } from './supabaseClient';
 
 const AuthContext = createContext<AuthState>({
   user: null,

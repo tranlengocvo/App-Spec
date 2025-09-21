@@ -17,6 +17,11 @@ const envSchema = z.object({
   RATE_LIMIT_DM_PER_HOUR: z.string().transform(Number).default('20'),
 });
 
+console.log('Environment variables:', {
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'loaded' : 'missing'
+});
+
 const env = envSchema.parse(process.env);
 
 // Public environment variables (safe to expose to client)

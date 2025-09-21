@@ -31,7 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+# .env*
 
 # vercel
 .vercel
@@ -41,5 +41,6 @@ yarn-error.log*
 next-env.d.ts
 ## node_modules is ignored by default to avoid committing dependencies (large + platform-specific).
 ## I commented it out so you can see the folder in your editor. Be careful NOT to commit node_modules to git.
+# node_modules
 # node_modules
 node_modules
