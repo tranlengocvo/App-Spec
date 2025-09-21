@@ -11,8 +11,16 @@ export default function SetupBanner() {
 
   useEffect(() => {
     setMounted(true);
-    setSupabaseConfigured(isSupabaseConfigured());
-    setServiceRoleAvailable(isServiceRoleAvailable());
+    const supabaseConfig = isSupabaseConfigured();
+    const serviceRole = isServiceRoleAvailable();
+    console.log('SetupBanner Debug:', {
+      supabaseConfig,
+      serviceRole,
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'loaded' : 'missing'
+    });
+    setSupabaseConfigured(supabaseConfig);
+    setServiceRoleAvailable(serviceRole);
   }, []);
 
   if (!mounted) {

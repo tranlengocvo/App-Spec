@@ -40,10 +40,10 @@ export const serverEnv = {
 
 // Helper to check if Supabase is configured
 export const isSupabaseConfigured = () => {
-  return !!(publicEnv.NEXT_PUBLIC_SUPABASE_URL && publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 };
 
 // Helper to check if service role is available
 export const isServiceRoleAvailable = () => {
-  return !!serverEnv.SUPABASE_SERVICE_ROLE_KEY;
+  return !!process.env.SUPABASE_SERVICE_ROLE_KEY;
 };
