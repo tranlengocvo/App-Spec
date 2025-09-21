@@ -155,6 +155,11 @@ export default function CreateSwapPage() {
           number: '00000',
           title: 'Unknown Course'
         },
+        users: {
+          name: user.name || 'Current User',
+          major: 'Computer Science',
+          year: 'Senior'
+        },
         offers_count: 0
       };
 

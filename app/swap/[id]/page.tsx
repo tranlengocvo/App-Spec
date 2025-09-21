@@ -303,12 +303,18 @@ export default function SwapDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-medium text-gray-900">{swap.users.name}</h3>
-                  {swap.users.major && (
-                    <p className="text-sm text-gray-600">{swap.users.major}</p>
+                  <h3 className="font-medium text-gray-900">
+                    {swap.users?.name || swap.user?.name || 'Unknown User'}
+                  </h3>
+                  {(swap.users?.major || swap.user?.major) && (
+                    <p className="text-sm text-gray-600">
+                      {swap.users?.major || swap.user?.major}
+                    </p>
                   )}
-                  {swap.users.year && (
-                    <p className="text-sm text-gray-600">{swap.users.year}</p>
+                  {(swap.users?.year || swap.user?.year) && (
+                    <p className="text-sm text-gray-600">
+                      {swap.users?.year || swap.user?.year}
+                    </p>
                   )}
                 </div>
               </CardContent>
