@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
@@ -88,8 +89,50 @@ export default function SwapDetailPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  // Find swap by ID
-  const swap = mockSwaps.find(s => s.id === id);
+  // Try to find swap in localStorage first, then fallback to mock data
+  const [swap, setSwap] = useState<any>(null);
+
+  useEffect(() => {
+    if (user) {
+      // Try to find in user's saved swaps first
+      const savedSwaps = localStorage.getItem(`user_swaps_${user.id}`);
+      if (savedSwaps) {
+        try {
+          const parsedSwaps = JSON.parse(savedSwaps);
+          const foundSwap = parsedSwaps.find((s: any) => s.id === id);
+          if (foundSwap) {
+            setSwap(foundSwap);
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing saved swaps:', error);
+        }
+      }
+    }
+    
+    // Fallback to mock data
+    const mockSwap = mockSwaps.find(s => s.id === id);
+    setSwap(mockSwap);
+  }, [id, user]);
+
+  if (swap === null) {
+    // Still loading
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 h-64 bg-gray-200 rounded"></div>
+              <div className="h-32 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);

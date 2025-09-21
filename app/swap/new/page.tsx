@@ -139,18 +139,35 @@ export default function CreateSwapPage() {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // In a real app, this would insert into the database
-      console.log('Creating swap request:', {
-        ...data,
-        user_id: user.id,
-        course: selectedCourse
-      });
+      // Create the swap request (mock for demo)
+      const newSwapRequest = {
+        id: `swap-${Date.now()}`,
+        current_crn: data.current_crn,
+        desired_crns: data.desired_crns,
+        time_window: data.time_window || null,
+        campus: data.campus,
+        term: data.term,
+        status: 'open',
+        notes: data.notes || null,
+        created_at: new Date().toISOString(),
+        courses: selectedCourse || {
+          subject: 'Unknown',
+          number: '00000',
+          title: 'Unknown Course'
+        },
+        offers_count: 0
+      };
+
+      // Save to localStorage for demo
+      const existingSwaps = JSON.parse(localStorage.getItem(`user_swaps_${user.id}`) || '[]');
+      const updatedSwaps = [newSwapRequest, ...existingSwaps];
+      localStorage.setItem(`user_swaps_${user.id}`, JSON.stringify(updatedSwaps));
 
       // Simulate success
       alert('Swap request created successfully! (This is a demo)');
       
-      // Redirect to swaps page
-      router.push('/swaps');
+      // Redirect to dashboard to see the new request
+      router.push('/dashboard');
     } catch (err) {
       console.error('Error creating swap:', err);
       setError(err instanceof Error ? err.message : 'Failed to create swap request');
