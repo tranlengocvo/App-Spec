@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 14;
 
-export default function SwapsPage() {
+function SwapsPageContent() {
   const { user, canCreateSwaps } = useAuth();
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
@@ -97,14 +97,14 @@ export default function SwapsPage() {
       const transformedData = data?.map(swap => ({
         id: swap.id,
         course: {
-          subject: swap.courses.subject,
-          number: swap.courses.number,
-          title: swap.courses.title,
+          subject: swap.courses[0]?.subject,
+          number: swap.courses[0]?.number,
+          title: swap.courses[0]?.title,
         },
         user: {
-          name: swap.users.name,
-          major: swap.users.major,
-          year: swap.users.year,
+          name: swap.users[0]?.name,
+          major: swap.users[0]?.major,
+          year: swap.users[0]?.year,
         },
         current_crn: swap.current_crn,
         desired_crns: swap.desired_crns,
@@ -279,5 +279,13 @@ export default function SwapsPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function SwapsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SwapsPageContent />
+    </Suspense>
   );
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { isServiceRoleAvailable } from '@/lib/env';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<Response> {
   try {
     if (!isServiceRoleAvailable()) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Run the seed script
     const { spawn } = require('child_process');
     
-    return new Promise((resolve) => {
+    return new Promise<Response>((resolve) => {
       const seedProcess = spawn('node', ['scripts/seed.js'], {
         stdio: 'pipe',
         env: { ...process.env }

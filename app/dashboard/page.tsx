@@ -178,11 +178,11 @@ export default function DashboardPage() {
         myOffers: myOffers?.map(offer => ({
           id: offer.id,
           swap: {
-            id: offer.swap_requests.id,
-            course: offer.swap_requests.courses,
-            current_crn: offer.swap_requests.current_crn,
-            desired_crns: offer.swap_requests.desired_crns,
-            status: offer.swap_requests.status,
+            id: offer.swap_requests[0]?.id,
+            course: offer.swap_requests[0]?.courses,
+            current_crn: offer.swap_requests[0]?.current_crn,
+            desired_crns: offer.swap_requests[0]?.desired_crns,
+            status: offer.swap_requests[0]?.status,
           },
           offered_crn: offer.offered_crn,
           status: offer.status,
@@ -197,8 +197,8 @@ export default function DashboardPage() {
           status: swap.status,
           created_at: swap.created_at,
           matched_user: {
-            name: swap.offers[0]?.users?.name || 'Unknown',
-            email: swap.offers[0]?.users?.email,
+            name: swap.offers[0]?.users?.[0]?.name || 'Unknown',
+            email: swap.offers[0]?.users?.[0]?.email,
           },
         })) || [],
       };
@@ -320,7 +320,7 @@ export default function DashboardPage() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="text-lg font-medium text-gray-900">
-                              {swap.course.subject} {swap.course.number}
+                              {swap.course[0]?.subject} {swap.course[0]?.number}
                             </h3>
                             <Badge className={getStatusColor(swap.status)}>
                               {swap.status.toUpperCase()}
@@ -331,7 +331,7 @@ export default function DashboardPage() {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-gray-600 mb-2">{swap.course.title}</p>
+                          <p className="text-gray-600 mb-2">{swap.course[0]?.title}</p>
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
                             <span>Current: {swap.current_crn}</span>
                             <span>Desired: {swap.desired_crns.join(', ')}</span>
@@ -391,7 +391,7 @@ export default function DashboardPage() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="text-lg font-medium text-gray-900">
-                              {offer.swap.course.subject} {offer.swap.course.number}
+                              {offer.swap.course[0]?.subject} {offer.swap.course[0]?.number}
                             </h3>
                             <Badge className={getStatusColor(offer.swap.status)}>
                               {offer.swap.status.toUpperCase()}
@@ -403,7 +403,7 @@ export default function DashboardPage() {
                               <Badge variant="secondary">Withdrawn</Badge>
                             )}
                           </div>
-                          <p className="text-gray-600 mb-2">{offer.swap.course.title}</p>
+                          <p className="text-gray-600 mb-2">{offer.swap.course[0]?.title}</p>
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
                             <span>Offered: {offer.offered_crn}</span>
                             <span>For: {offer.swap.current_crn}</span>
@@ -454,13 +454,13 @@ export default function DashboardPage() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="text-lg font-medium text-gray-900">
-                              {match.course.subject} {match.course.number}
+                              {match.course[0]?.subject} {match.course[0]?.number}
                             </h3>
                             <Badge className="bg-green-100 text-green-800">
                               MATCHED
                             </Badge>
                           </div>
-                          <p className="text-gray-600 mb-2">{match.course.title}</p>
+                          <p className="text-gray-600 mb-2">{match.course[0]?.title}</p>
                           <div className="space-y-1">
                             <div className="flex items-center space-x-2 text-sm text-gray-600">
                               <User className="h-4 w-4" />

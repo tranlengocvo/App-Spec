@@ -61,7 +61,7 @@ export default function SwapDetailPage() {
   const [notes, setNotes] = useState('');
 
   // Fetch swap details
-  const { data: swap, isLoading, error } = useQuery({
+  const { data: swap, isLoading, error } = useQuery<any>({
     queryKey: ['swap', id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -134,16 +134,16 @@ export default function SwapDetailPage() {
         agree_state: offer.agree_state,
         created_at: offer.created_at,
         user: {
-          name: offer.users.name,
-          major: offer.users.major,
-          year: offer.users.year,
+          name: offer.users[0]?.name,
+          major: offer.users[0]?.major,
+          year: offer.users[0]?.year,
         },
         messages: offer.messages?.map(msg => ({
           id: msg.id,
           body: msg.body,
           created_at: msg.created_at,
           sender: {
-            name: msg.users.name,
+            name: msg.users[0]?.name,
           },
         })) || [],
       })) || [];
@@ -356,7 +356,7 @@ export default function SwapDetailPage() {
 
   const isOwner = user?.id === swap.user.id;
   const isMatched = swap.status === 'matched';
-  const showEmails = isMatched && (isOwner || swap.offers.some(o => o.user.name === user?.name));
+  const showEmails = isMatched && (isOwner || swap.offers.some((o: any) => o.user.name === user?.name));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -417,7 +417,7 @@ export default function SwapDetailPage() {
                     </CardContent>
                   </Card>
                 ) : (
-                  swap.offers.map((offer) => (
+                  swap.offers.map((offer: any) => (
                     <OfferItem
                       key={offer.id}
                       offer={offer}
@@ -445,7 +445,7 @@ export default function SwapDetailPage() {
                       <div>
                         <label className="text-sm font-medium text-gray-700">Desired CRNs</label>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {swap.desired_crns.map((crn, index) => (
+                          {swap.desired_crns.map((crn: any, index: number) => (
                             <Badge key={index} variant="outline">{crn}</Badge>
                           ))}
                         </div>

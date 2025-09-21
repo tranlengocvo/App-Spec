@@ -65,12 +65,12 @@ export async function searchCourses(subject: string, number: string): Promise<Co
       number: course.Number,
       title: course.Title,
       sections: sections.map(s => ({
-        crn: s.CRN,
-        section_code: s.Section,
-        meeting_days: s.MeetingDays || '',
-        meeting_time: s.MeetingTime || '',
-        instructor: s.Instructor || '',
-        term: s.Term || 'Fall 2024'
+        crn: s.crn,
+        section_code: s.section_code,
+        meeting_days: s.meeting_days || '',
+        meeting_time: s.meeting_time || '',
+        instructor: s.instructor || '',
+        term: s.term || 'Fall 2024'
       }))
     };
   } catch (error) {
